@@ -1,13 +1,58 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { PERFORMANCE_DATA } from "@/lib/stovest-data";
+import { supabase } from "@/lib/supabaseClient";
+import { useUser } from "@/contexts/UserContext";
+
+type PerfPoint = { month: string; value: number };
 
 const RANGE_BUTTONS = ["D", "1W", "1M", "6M", "1Y"];
 
 export default function PortfolioPerformanceChart() {
+  const user = useUser();
   const [activeRange, setActiveRange] = useState("6M");
+  const [data, setData] = useState<PerfPoint[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user?.id) return;
+    supabase
+      .from("performance_data")
+      .select("month, value")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: true })
+      .then(({ data: res, error }) => {
+        if (!error && res?.length) {
+          setData(res.map((r) => ({ month: r.month, value: Number(r.value) })));
+        } else {
+          setData([]);
+        }
+        setLoading(false);
+      });
+  }, [user?.id]);
+
+  if (!loading && data.length === 0) {
+    return (
+      <div className="rounded-2xl border border-white/10 bg-[#16181c] p-6">
+        <h3 className="mb-4 text-base font-semibold text-white">Portfolio Performance</h3>
+        <div className="flex h-64 items-center justify-center">
+          <p className="text-sm text-[#94a3b8]">No performance data. Run the Supabase schema.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="rounded-2xl border border-white/10 bg-[#16181c] p-6">
+        <h3 className="mb-4 text-base font-semibold text-white">Portfolio Performance</h3>
+        <div className="flex h-64 items-center justify-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#3b82f6] border-t-transparent" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-2xl border border-white/10 bg-[#16181c] p-6">
@@ -29,7 +74,7 @@ export default function PortfolioPerformanceChart() {
       </div>
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={PERFORMANCE_DATA} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+          <AreaChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
             <defs>
               <linearGradient id="performanceGrad" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.4} />

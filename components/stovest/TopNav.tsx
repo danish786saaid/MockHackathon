@@ -1,8 +1,15 @@
 "use client";
 
 import { Search, Bell, Settings } from "lucide-react";
+import { useUser } from "@/contexts/UserContext";
 
 export default function TopNav() {
+  const user = useUser();
+
+  const displayName = user?.name || "User";
+  const displayEmail = user?.email || "";
+  const initials = (user?.name || "U").split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase() || "U";
+
   return (
     <header className="sticky top-0 z-50 flex h-14 items-center justify-between gap-4 border-b border-white/10 px-6 bg-[#0f1114]/95 backdrop-blur">
       <div className="flex items-center gap-8">
@@ -36,10 +43,10 @@ export default function TopNav() {
           <Settings className="h-5 w-5" />
         </button>
         <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 pl-2 pr-4 py-1.5">
-          <div className="h-8 w-8 rounded-full bg-[#3b82f6] flex items-center justify-center text-xs font-bold text-white">NR</div>
+          <div className="h-8 w-8 rounded-full bg-[#3b82f6] flex items-center justify-center text-xs font-bold text-white">{initials}</div>
           <div>
-            <p className="text-sm font-medium text-white">Naya Rochel</p>
-            <p className="text-xs text-[#94a3b8]">rachel@gmail.com</p>
+            <p className="text-sm font-medium text-white">{displayName}</p>
+            <p className="text-xs text-[#94a3b8]">{displayEmail || "—"}</p>
           </div>
         </div>
       </div>
