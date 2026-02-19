@@ -1,6 +1,7 @@
 "use client";
 
 import { ExternalLink, TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { useTranslation } from "@/lib/i18n/use-translation";
 import { MOCK_NEWS } from "@/lib/constants";
 
 const sentimentConfig = {
@@ -10,16 +11,17 @@ const sentimentConfig = {
 };
 
 export default function LatestNewsCard() {
+  const { t } = useTranslation();
   return (
     <div className="glass-card flex h-full flex-col overflow-hidden">
       <div className="flex items-center justify-between border-b border-white/[0.08] px-6 py-4">
         <div>
-          <h3 className="text-base font-semibold text-white">Latest News</h3>
-          <p className="mt-0.5 text-[11px] text-[#78716c]">Live feed</p>
+          <h3 className="text-theme-primary text-base font-semibold">{t("dashboard.latestNews")}</h3>
+          <p className="text-theme-muted mt-0.5 text-[11px]">{t("dashboard.liveFeed")}</p>
         </div>
         <span className="flex items-center gap-1.5 rounded-full bg-[#ea580c]/10 px-2.5 py-1 text-[11px] font-medium text-[#ea580c]">
           <span className="h-1.5 w-1.5 rounded-full bg-[#ea580c] animate-pulse" />
-          Live
+          {t("dashboard.live")}
         </span>
       </div>
       <div className="flex-1 overflow-y-auto">

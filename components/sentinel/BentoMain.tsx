@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@/lib/auth-context";
+import { useTranslation } from "@/lib/i18n/use-translation";
 import PortfolioValueCard from "./PortfolioValueCard";
 import KpiCardsRow from "./KpiCardsRow";
 import TrustGaugeCard from "./TrustGaugeCard";
@@ -13,14 +14,15 @@ import LatestNewsCard from "./LatestNewsCard";
 
 export default function BentoMain() {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const firstName = user?.name?.split(/\s+/)[0] ?? "there";
 
   return (
     <main className="mx-auto max-w-[1440px] px-8 pb-12 pt-8">
       {/* Page header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight text-white">Dashboard</h1>
-        <p className="mt-1 text-sm text-[#78716c]">Welcome back, {firstName}. Here&apos;s your portfolio overview.</p>
+        <h1 className="text-theme-primary text-2xl font-semibold tracking-tight">{t("dashboard.title")}</h1>
+        <p className="text-theme-muted mt-1 text-sm">{t("dashboard.welcomeBack", { name: firstName })}</p>
       </div>
 
       <div className="bento-grid">

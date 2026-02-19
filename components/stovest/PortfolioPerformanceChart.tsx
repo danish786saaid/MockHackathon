@@ -35,7 +35,7 @@ export default function PortfolioPerformanceChart() {
   return (
     <div className="glass-card p-6">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-base font-semibold text-white">Portfolio Performance</h3>
+        <h3 className="text-theme-primary text-base font-semibold">Portfolio Performance</h3>
         <div className="flex shrink-0 gap-0 rounded-lg border border-white/[0.06] bg-white/[0.03] p-0.5">
           {RANGE_BUTTONS.map((r) => (
             <button
@@ -44,7 +44,7 @@ export default function PortfolioPerformanceChart() {
               className={`min-w-[2.25rem] rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
                 activeRange === r
                   ? "text-white"
-                  : "text-[#78716c] hover:bg-white/[0.04] hover:text-white"
+                  : "text-theme-muted hover:bg-white/[0.04] hover:text-theme-primary"
               }`}
               style={activeRange === r ? { background: "rgba(234, 88, 12, 0.15)", color: "#f97316" } : undefined}
             >

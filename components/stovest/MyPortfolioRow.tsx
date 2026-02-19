@@ -11,7 +11,7 @@ export default function MyPortfolioRow({ onSeeAllClick }: MyPortfolioRowProps) {
   return (
     <div className="glass-card flex h-full flex-col p-6">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-base font-semibold text-white">My Portfolio</h3>
+        <h3 className="text-theme-primary text-base font-semibold">My Portfolio</h3>
         {onSeeAllClick ? (
           <button
             type="button"
@@ -35,11 +35,11 @@ export default function MyPortfolioRow({ onSeeAllClick }: MyPortfolioRowProps) {
             key={s.ticker}
             className="glass-subtle min-w-[140px] shrink-0 px-4 py-3"
           >
-            <p className="text-lg font-bold text-white">${s.value.toLocaleString("en-US", { minimumFractionDigits: 1 })}</p>
+            <p className="text-theme-primary text-lg font-bold">${s.value.toLocaleString("en-US", { minimumFractionDigits: 1 })}</p>
             <p className={`text-sm font-medium ${s.change >= 0 ? "text-[#22c55e]" : "text-[#ef4444]"}`}>
               {s.change >= 0 ? "+" : ""}{s.change}%
             </p>
-            <p className="mt-1 truncate text-xs text-[#78716c]" title={`${s.ticker}, Units ${s.units}`}>
+            <p className="text-theme-muted mt-1 truncate text-xs" title={`${s.ticker}, Units ${s.units}`}>
               {s.ticker}, Units {s.units}
             </p>
           </div>

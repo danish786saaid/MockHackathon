@@ -2,12 +2,15 @@
 
 import { useState } from "react";
 import { Shield } from "lucide-react";
+import { useTranslation } from "@/lib/i18n/use-translation";
 import { MOCK_RULES } from "@/lib/constants";
 
-const FILTERS = ["All", "Active", "Paused"];
+const FILTER_KEYS = ["dashboard.filterAll", "dashboard.filterActive", "dashboard.filterPaused"] as const;
+const FILTER_VALUES = ["All", "Active", "Paused"] as const;
 
 export default function ActiveRulesTable() {
-  const [activeFilter, setActiveFilter] = useState("All");
+  const { t } = useTranslation();
+  const [activeFilter, setActiveFilter] = useState<typeof FILTER_VALUES[number]>("All");
 
   const filtered =
     activeFilter === "All"
@@ -17,9 +20,9 @@ export default function ActiveRulesTable() {
   return (
     <div className="glass-card h-full overflow-hidden">
       <div className="flex items-center justify-between border-b border-white/[0.08] px-6 py-4">
-        <h3 className="text-base font-semibold text-white">Active Rules</h3>
+        <h3 className="text-theme-primary text-base font-semibold">{t("dashboard.activeRules")}</h3>
         <div className="flex gap-1 rounded-lg p-1 bg-white/[0.05]">
-          {FILTERS.map((f) => (
+          {FILTER_VALUES.map((f, i) => (
             <button
               key={f}
               onClick={() => setActiveFilter(f)}
@@ -28,7 +31,7 @@ export default function ActiveRulesTable() {
               }`}
               style={activeFilter === f ? { background: "rgba(234, 88, 12, 0.3)", color: "#f97316" } : undefined}
             >
-              {f}
+              {t(FILTER_KEYS[i])}
             </button>
           ))}
         </div>
@@ -37,8 +40,8 @@ export default function ActiveRulesTable() {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-white/[0.08] text-left text-[#a8a29e]">
-              <th className="pb-3 pl-6 pr-4 font-medium">Rule</th>
-              <th className="pb-3 px-4 font-medium">Status</th>
+              <th className="pb-3 pl-6 pr-4 font-medium">{t("dashboard.rule")}</th>
+              <th className="pb-3 px-4 font-medium">{t("dashboard.status")}</th>
             </tr>
           </thead>
           <tbody>
@@ -54,11 +57,11 @@ export default function ActiveRulesTable() {
                     >
                       <Shield className="h-4 w-4" style={{ color: rule.status === "active" ? "#22c55e" : "#a8a29e" }} />
                     </div>
-                    <span className="text-white">{rule.rule}</span>
+                    <span className="text-theme-primary">{rule.rule}</span>
                   </div>
                 </td>
                 <td className="py-3 px-4 font-medium" style={{ color: rule.status === "active" ? "#22c55e" : "#a8a29e" }}>
-                  {rule.status === "active" ? "Active" : "Paused"}
+                  {rule.status === "active" ? t("dashboard.filterActive") : t("dashboard.filterPaused")}
                 </td>
               </tr>
             ))}

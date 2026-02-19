@@ -5,12 +5,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Mail, Lock, Shield } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
+import { useTranslation } from "@/lib/i18n/use-translation";
 
 const inputClass =
   "w-full rounded-xl border border-white/[0.06] bg-white/[0.03] py-3 pl-10 pr-4 text-sm text-white placeholder-[#78716c] transition-colors focus:border-[#ea580c]/30 focus:outline-none focus:bg-white/[0.05]";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { t } = useTranslation();
   const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,11 +24,11 @@ export default function LoginPage() {
     e.preventDefault();
     setError("");
     if (!email.trim()) {
-      setError("Enter your email");
+      setError(t("auth.enterEmail"));
       return;
     }
     if (!password) {
-      setError("Enter your password");
+      setError(t("auth.enterPassword"));
       return;
     }
     setLoading(true);
@@ -35,7 +37,7 @@ export default function LoginPage() {
       router.push("/");
       router.refresh();
     } catch {
-      setError("Something went wrong. Please try again.");
+      setError(t("auth.somethingWrong"));
     } finally {
       setLoading(false);
     }
@@ -45,10 +47,10 @@ export default function LoginPage() {
     <div className="glass-card p-8">
       <div className="mb-8">
         <h1 className="text-2xl font-semibold tracking-tight text-white">
-          Sign in
+          {t("auth.signIn")}
         </h1>
         <p className="mt-1 text-sm text-[#78716c]">
-          Welcome back. Sign in to your Sentinel account.
+          {t("auth.welcomeBackSignIn")}
         </p>
       </div>
 
@@ -61,7 +63,7 @@ export default function LoginPage() {
 
         <div>
           <label className="mb-1.5 block text-xs font-medium text-[#a8a29e]">
-            Email
+            {t("auth.email")}
           </label>
           <div className="relative">
             <Mail className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#78716c]" />
@@ -78,7 +80,7 @@ export default function LoginPage() {
 
         <div>
           <label className="mb-1.5 block text-xs font-medium text-[#a8a29e]">
-            Password
+            {t("auth.password")}
           </label>
           <div className="relative">
             <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#78716c]" />
@@ -101,13 +103,13 @@ export default function LoginPage() {
               onChange={(e) => setRemember(e.target.checked)}
               className="rounded border-white/[0.2] bg-white/[0.05] text-[#ea580c] focus:ring-[#ea580c]/50"
             />
-            <span className="text-sm text-[#a8a29e]">Remember me</span>
+            <span className="text-sm text-[#a8a29e]">{t("auth.rememberMe")}</span>
           </label>
           <Link
             href="#"
             className="text-sm text-[#f97316] hover:text-[#ea580c] transition-colors"
           >
-            Forgot password?
+            {t("auth.forgotPassword")}
           </Link>
         </div>
 
@@ -119,7 +121,7 @@ export default function LoginPage() {
             background: "linear-gradient(135deg, #ea580c, #f59e0b)",
           }}
         >
-          {loading ? "Signing in…" : "Sign in"}
+          {loading ? t("auth.signingIn") : t("auth.signIn")}
         </button>
       </form>
 
@@ -129,7 +131,7 @@ export default function LoginPage() {
         </div>
         <div className="relative flex justify-center text-xs">
           <span className="bg-[#1c1917] px-3 text-[#78716c]">
-            Or continue with
+            {t("auth.orContinueWith")}
           </span>
         </div>
       </div>
@@ -139,16 +141,16 @@ export default function LoginPage() {
         className="w-full flex items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] py-3 text-sm text-[#a8a29e] transition-colors hover:bg-white/[0.06] hover:text-white"
       >
         <Shield className="h-4 w-4" />
-        Sign in with Google
+        {t("auth.signInWithGoogle")}
       </button>
 
       <p className="mt-6 text-center text-sm text-[#78716c]">
-        Don&apos;t have an account?{" "}
+        {t("auth.noAccount")}{" "}
         <Link
           href="/register"
           className="font-medium text-[#f97316] hover:text-[#ea580c] transition-colors"
         >
-          Sign up
+          {t("auth.signUp")}
         </Link>
       </p>
     </div>

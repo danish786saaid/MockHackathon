@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import type { RuleCategoryId } from "@/lib/constants";
 import { MOCK_RULES_EXTENDED, AI_SUGGESTED_RULES } from "@/lib/constants";
+import { useTranslation } from "@/lib/i18n/use-translation";
 import RulesTreeSidebar from "./RulesTreeSidebar";
 import RuleCategoryCards from "./RuleCategoryCards";
 import AISuggestionsPanel from "./AISuggestionsPanel";
@@ -23,6 +24,7 @@ function nextId(rules: ExtendedRule[]) {
 }
 
 export default function RulesPageContent() {
+  const { t } = useTranslation();
   const [rules, setRules] = useState<ExtendedRule[]>(MOCK_RULES_EXTENDED);
   const [suggestions, setSuggestions] = useState(AI_SUGGESTED_RULES);
   const [selectedCategoryId, setSelectedCategoryId] = useState<RuleCategoryId | null>(null);
@@ -84,8 +86,8 @@ export default function RulesPageContent() {
       <div className="flex flex-1 flex-col gap-6 overflow-auto px-6 pt-2">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-xl font-semibold text-white">Rules</h1>
-            <p className="text-sm text-[#78716c]">Manage and create risk rules for your portfolio</p>
+            <h1 className="text-xl font-semibold text-white">{t("rules.title")}</h1>
+            <p className="text-sm text-[#78716c]">{t("rules.subtitle")}</p>
           </div>
           <div className="w-full sm:w-auto sm:min-w-[320px]">
             <RuleCreateForm onSubmit={handleAddRule} />

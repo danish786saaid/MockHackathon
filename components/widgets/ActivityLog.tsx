@@ -4,20 +4,14 @@ import { useState, useEffect } from "react";
 import { Activity } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 import { useUser } from "@/contexts/UserContext";
+import { usePreferences } from "@/contexts/PreferencesContext";
+import { formatRelativeTime } from "@/lib/format-date";
 
 type ActivityItem = { id: string; action: string; created_at: string };
 
-function formatTime(iso: string) {
-  const d = new Date(iso);
-  const diff = Math.floor((Date.now() - d.getTime()) / 60000);
-  if (diff < 1) return "Just now";
-  if (diff < 60) return `${diff} min ago`;
-  if (diff < 1440) return `${Math.floor(diff / 60)} hour${diff >= 120 ? "s" : ""} ago`;
-  return `${Math.floor(diff / 1440)} day${diff >= 2880 ? "s" : ""} ago`;
-}
-
 export default function ActivityLog() {
   const user = useUser();
+  const { timezone } = usePreferences();
   const [items, setItems] = useState<ActivityItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -81,7 +75,7 @@ export default function ActivityLog() {
             <div className="mt-0.5 h-2 w-2 shrink-0 rounded-full" style={{ background: "#3b82f6" }} />
             <div>
               <p className="text-[#94a3b8]">{item.action}</p>
-              <p className="text-xs text-[#94a3b8]/70">{formatTime(item.created_at)}</p>
+              <p className="text-xs text-[#94a3b8]/70">{formatRelativeTime(item.created_at, timezone)}</p>
             </div>
           </div>
         ))}
