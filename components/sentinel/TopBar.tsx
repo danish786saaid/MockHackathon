@@ -53,7 +53,7 @@ export default function TopBar() {
             <span className="text-lg font-semibold tracking-tight text-white">Sentinel</span>
           </Link>
 
-          <nav className="flex items-center gap-1">
+          <nav className="flex gap-1">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
               return (
