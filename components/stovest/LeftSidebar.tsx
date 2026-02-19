@@ -1,6 +1,7 @@
 "use client";
 
 import { LayoutDashboard, Wallet, BarChart3, TrendingUp, Users, HelpCircle } from "lucide-react";
+import { useUser } from "@/contexts/UserContext";
 
 const mainMenu = [
   { label: "Dashboard", icon: LayoutDashboard, active: true },
@@ -15,11 +16,14 @@ const supportMenu = [
 ];
 
 export default function LeftSidebar() {
+  const user = useUser();
+  const userName = user?.name ? user.name.split(" ")[0] : "User";
+
   return (
     <aside className="fixed left-0 top-14 z-40 h-[calc(100vh-3.5rem)] w-64 border-r border-white/10 bg-[#0f1114]">
       <div className="flex h-full flex-col p-6">
         <div className="mb-8">
-          <h2 className="text-lg font-semibold text-white">Welcome, Naya</h2>
+          <h2 className="text-lg font-semibold text-white">Welcome, {userName}</h2>
           <p className="mt-1 text-sm text-[#94a3b8]">Here&apos;s your stock portfolio overview</p>
         </div>
 
