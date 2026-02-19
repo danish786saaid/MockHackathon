@@ -1,20 +1,24 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { LayoutDashboard, Shield, Wallet, TrendingUp, Users, HelpCircle } from "lucide-react";
 
 const mainMenu = [
-  { label: "Dashboard", icon: LayoutDashboard, active: true },
-  { label: "Rules", icon: Shield, active: false },
-  { label: "Portfolio", icon: Wallet, active: false },
-  { label: "Market", icon: TrendingUp, active: false },
+  { label: "Dashboard", icon: LayoutDashboard, href: "/" },
+  { label: "Rules", icon: Shield, href: "/rules" },
+  { label: "Portfolio", icon: Wallet, href: "#" },
+  { label: "Market", icon: TrendingUp, href: "#" },
 ];
 
 const supportMenu = [
-  { label: "Community", icon: Users, active: false },
-  { label: "Help & Support", icon: HelpCircle, active: false },
+  { label: "Community", icon: Users, href: "#" },
+  { label: "Help & Support", icon: HelpCircle, href: "#" },
 ];
 
 export default function LeftSidebar() {
+  const pathname = usePathname();
+
   return (
     <aside
       className="fixed left-0 top-14 z-40 h-[calc(100vh-3.5rem)] w-[260px] border-r border-white/10 backdrop-blur-xl"
@@ -28,19 +32,22 @@ export default function LeftSidebar() {
 
         <nav className="space-y-1">
           <p className="mb-3 text-[10px] font-semibold uppercase tracking-widest text-[#94a3b8]">Main Menu</p>
-          {mainMenu.map((item) => (
-            <a
-              key={item.label}
-              href="#"
-              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${
-                item.active ? "text-white" : "text-[#94a3b8] hover:bg-white/5 hover:text-white"
-              }`}
-              style={item.active ? { background: "#3b82f6" } : undefined}
-            >
-              <item.icon className="h-4 w-4 shrink-0" />
-              {item.label}
-            </a>
-          ))}
+          {mainMenu.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${
+                  isActive ? "text-white" : "text-[#94a3b8] hover:bg-white/5 hover:text-white"
+                }`}
+                style={isActive ? { background: "#3b82f6" } : undefined}
+              >
+                <item.icon className="h-4 w-4 shrink-0" />
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
 
         <nav className="mt-8 space-y-1">

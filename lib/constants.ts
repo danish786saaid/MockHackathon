@@ -90,6 +90,91 @@ export const MOCK_RULES = [
   },
 ];
 
+export type RuleCategoryId = "market" | "portfolio" | "news" | "security";
+
+export const RULE_CATEGORIES: { id: RuleCategoryId; label: string; icon: string }[] = [
+  { id: "market", label: "Market Rules", icon: "TrendingUp" },
+  { id: "portfolio", label: "Portfolio Rules", icon: "Wallet" },
+  { id: "news", label: "News-Based Rules", icon: "Newspaper" },
+  { id: "security", label: "Security Rules", icon: "ShieldAlert" },
+];
+
+export const MOCK_RULES_EXTENDED: {
+  id: string;
+  rule: string;
+  status: "active" | "paused";
+  category: RuleCategoryId;
+  createdAt: string;
+}[] = [
+  {
+    id: "1",
+    rule: "If major regulatory crackdown on stablecoins in US, swap USDT to USDC",
+    status: "active",
+    category: "market",
+    createdAt: "2 hours ago",
+  },
+  {
+    id: "2",
+    rule: "If exchange hack reported, pause all trading",
+    status: "active",
+    category: "security",
+    createdAt: "1 day ago",
+  },
+  {
+    id: "3",
+    rule: "If BTC drops >15% in 24h on bad news, reduce exposure by 50%",
+    status: "active",
+    category: "market",
+    createdAt: "3 days ago",
+  },
+  {
+    id: "4",
+    rule: "If Fed signals aggressive rate hike, move 20% to stablecoins",
+    status: "paused",
+    category: "market",
+    createdAt: "1 week ago",
+  },
+  {
+    id: "5",
+    rule: "If portfolio drawdown exceeds 10%, rebalance to defensive assets",
+    status: "active",
+    category: "portfolio",
+    createdAt: "5 hours ago",
+  },
+  {
+    id: "6",
+    rule: "If negative news sentiment on top 3 holdings, reduce position sizes",
+    status: "active",
+    category: "news",
+    createdAt: "2 days ago",
+  },
+  {
+    id: "7",
+    rule: "If 2FA or API key change detected, pause all automated rules",
+    status: "active",
+    category: "security",
+    createdAt: "4 days ago",
+  },
+];
+
+export const AI_SUGGESTED_RULES: { id: string; rule: string; reason: string }[] = [
+  {
+    id: "s1",
+    rule: "If ETH gas fees spike above 200 gwei, delay all swaps for 1 hour",
+    reason: "Gas fee volatility detected in the last 48h",
+  },
+  {
+    id: "s2",
+    rule: "If BTC dominance drops below 40%, rebalance altcoin exposure",
+    reason: "Altcoin season indicator trending",
+  },
+  {
+    id: "s3",
+    rule: "If stablecoin depeg exceeds 2%, emergency exit to fiat",
+    reason: "Historical depeg events caused cascading losses",
+  },
+];
+
 export const MOCK_RISK_TREND = [
   { day: "Mon", risk: 12, value: 118200 },
   { day: "Tue", risk: 18, value: 121500 },
