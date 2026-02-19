@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ChevronDown } from "lucide-react";
+import { ArrowUpRight, TrendingUp } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 import { useUser } from "@/contexts/UserContext";
 
@@ -39,8 +39,8 @@ export default function PortfolioValueCard() {
     return (
       <div className="glass-card flex h-full flex-col justify-center p-6">
         <div className="flex items-center gap-3">
-          <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#3b82f6] border-t-transparent" />
-          <span className="text-sm text-[#94a3b8]">Loading portfolio...</span>
+          <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#ea580c] border-t-transparent" />
+          <span className="text-sm text-[#78716c]">Loading portfolio...</span>
         </div>
       </div>
     );
@@ -51,21 +51,26 @@ export default function PortfolioValueCard() {
   const returnAmount = data?.return_amount ?? 0;
 
   return (
-    <div className="glass-card flex h-full flex-col justify-center p-6">
+    <div className="glass-card flex h-full flex-col justify-between p-7">
       <div className="flex items-start justify-between">
-        <div>
-          <p className="text-xs font-medium uppercase tracking-wider text-[#94a3b8]">Portfolio Value</p>
-          <p className="mt-3 text-4xl font-bold text-white">
-            ${value.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
-          </p>
-          <p className="mt-2 text-sm" style={{ color: returnPct >= 0 ? "#22c55e" : "#ef4444" }}>
-            Return <span className="font-medium">{returnPct >= 0 ? "+" : ""}{returnPct}% (${returnAmount})</span>
-          </p>
-          <p className="text-xs text-[#94a3b8]">vs last week</p>
+        <p className="text-xs font-medium uppercase tracking-widest text-[#78716c]">Total Portfolio</p>
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#ea580c]/10">
+          <TrendingUp className="h-4 w-4 text-[#ea580c]" />
         </div>
-        <button className="rounded-lg p-1.5 text-[#94a3b8] hover:bg-white/10 hover:text-white">
-          <ChevronDown className="h-5 w-5" />
-        </button>
+      </div>
+
+      <div className="mt-6">
+        <p className="text-4xl font-bold tracking-tight text-white">${value.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</p>
+        <div className="mt-3 flex items-center gap-2">
+          <span
+            className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium"
+            style={{ background: returnPct >= 0 ? "rgba(34, 197, 94, 0.1)" : "rgba(239, 68, 68, 0.1)", color: returnPct >= 0 ? "#22c55e" : "#ef4444" }}
+          >
+            <ArrowUpRight className="h-3 w-3" />
+            {returnPct >= 0 ? "+" : ""}{returnPct}%
+          </span>
+          <span className="text-xs text-[#78716c]">${returnAmount} vs last week</span>
+        </div>
       </div>
     </div>
   );
