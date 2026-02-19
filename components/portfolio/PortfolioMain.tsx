@@ -14,62 +14,60 @@ export default function PortfolioMain() {
   const [seeAllOpen, setSeeAllOpen] = useState(false);
 
   return (
-    <main
-      className="mx-auto max-w-[1440px] px-8 pb-12 pt-8"
-      style={{ marginLeft: 260, marginRight: 320, minHeight: "calc(100vh - 4rem)" }}
-    >
-      {/* Page header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight text-white">Portfolio</h1>
-        <p className="mt-1 text-sm text-[#78716c]">Track your holdings, performance, and watchlist.</p>
-      </div>
-
-      <div className="bento-grid">
-        {/* Row 1: Profile card (4 col) + Total Holding (4 col) + My Portfolio (4 col) */}
-        <div className="col-span-4">
+    <main className="min-h-[calc(100vh-4rem)]">
+      {/* Portfolio-only header: no sidebars, no notifications */}
+      <header className="border-b border-white/[0.06] bg-white/[0.02]">
+        <div className="mx-auto max-w-[1200px] px-6 py-6 sm:px-8">
           <button
             type="button"
             onClick={() => setProfileOpen(true)}
-            className="glass-card flex h-full min-h-[180px] w-full cursor-pointer flex-col items-center justify-center gap-4 p-6 text-left transition-shadow hover:shadow-glassHover"
+            className="flex cursor-pointer items-center gap-4 rounded-2xl p-2 text-left transition-opacity hover:opacity-90"
+            aria-label="Open profile"
           >
-            <div className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/[0.08] bg-white/[0.05]">
+            <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/[0.1] bg-white/[0.05] sm:h-14 sm:w-14">
               {!profileImgError ? (
                 <img
                   src="/portfolio/profile.png"
-                  alt="Profile"
-                  width={80}
-                  height={80}
+                  alt=""
+                  width={56}
+                  height={56}
                   className="h-full w-full object-cover"
                   onError={() => setProfileImgError(true)}
                 />
               ) : (
-                <span className="text-xl font-bold">NR</span>
+                <span className="text-base font-bold text-white sm:text-lg">NR</span>
               )}
             </div>
-            <div className="text-center">
-              <h3 className="text-lg font-semibold">Naya Rochel</h3>
-              <p className="mt-0.5 text-sm text-[#78716c]">Portfolio overview</p>
+            <div>
+              <h1 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">Portfolio</h1>
+              <p className="text-sm text-[#78716c]">Naya Rochel · Holdings, performance & watchlist</p>
             </div>
           </button>
         </div>
-        <div className="col-span-4">
-          <TotalHoldingCard />
-        </div>
-        <div className="col-span-4">
-          <MyPortfolioRow onSeeAllClick={() => setSeeAllOpen(true)} />
+      </header>
+
+      {/* Content: full width, no left/right bars */}
+      <div className="mx-auto max-w-[1200px] px-6 py-8 sm:px-8">
+        <div className="grid gap-6 lg:grid-cols-3 mb-8">
+          <div className="lg:col-span-1">
+            <TotalHoldingCard />
+          </div>
+          <div className="lg:col-span-2">
+            <MyPortfolioRow onSeeAllClick={() => setSeeAllOpen(true)} />
+          </div>
         </div>
 
-        {/* Row 2: Performance chart full width */}
-        <div className="col-span-12">
+        <section className="mb-8">
           <PortfolioPerformanceChart />
-        </div>
+        </section>
 
-        {/* Row 3: Overview table (8 col) + Watchlist (4 col) */}
-        <div id="portfolio-overview" className="col-span-8 scroll-mt-6">
-          <PortfolioOverviewTable />
-        </div>
-        <div className="col-span-4">
-          <WatchlistSection />
+        <div className="grid gap-8 lg:grid-cols-3">
+          <section id="portfolio-overview" className="lg:col-span-2 scroll-mt-6">
+            <PortfolioOverviewTable />
+          </section>
+          <section>
+            <WatchlistSection />
+          </section>
         </div>
       </div>
 
