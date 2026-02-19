@@ -8,34 +8,46 @@ const FILTERS = ["Most Viewed", "Gainers", "Losers"];
 export default function WatchlistSection() {
   const [activeFilter, setActiveFilter] = useState("Most Viewed");
 
+  const filteredList =
+    activeFilter === "Gainers"
+      ? WATCHLIST.filter((item) => item.change >= 0)
+      : activeFilter === "Losers"
+        ? WATCHLIST.filter((item) => item.change < 0)
+        : WATCHLIST;
+
   return (
-    <div className="rounded-2xl border border-white/10 bg-[#16181c] p-6">
-      <div className="mb-4 flex items-center justify-between">
+    <div className="glass-card overflow-hidden p-6">
+      <div className="mb-4 flex flex-col gap-3">
         <h3 className="text-base font-semibold text-white">Watchlist</h3>
-        <div className="flex gap-1 rounded-lg bg-white/5 p-1">
+        <div className="flex w-full max-w-full flex-wrap gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1">
           {FILTERS.map((f) => (
             <button
               key={f}
               onClick={() => setActiveFilter(f)}
-              className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
-                activeFilter === f ? "bg-[#3b82f6] text-white" : "text-[#94a3b8] hover:text-white"
+              className={`flex-1 min-w-0 rounded-md px-2 py-1.5 text-xs font-medium transition-colors sm:flex-none sm:min-w-0 ${
+                activeFilter === f
+                  ? "text-white"
+                  : "text-[#78716c] hover:bg-white/[0.04] hover:text-white"
               }`}
+              style={activeFilter === f ? { background: "rgba(234, 88, 12, 0.15)", color: "#f97316" } : undefined}
             >
-              {f}
+              {f === "Most Viewed" ? "Viewed" : f}
             </button>
           ))}
         </div>
       </div>
       <div className="space-y-3">
-        {WATCHLIST.map((item) => (
-          <div key={item.name} className="flex items-center justify-between rounded-xl border border-white/5 bg-white/5 px-4 py-3">
+        {filteredList.map((item) => (
+          <div key={item.name} className="glass-subtle flex items-center justify-between px-4 py-3">
             <div>
               <p className="font-medium text-white">{item.name}</p>
-              <p className="text-xs text-[#94a3b8]">{item.exchange}</p>
+              <p className="text-xs text-[#78716c]">{item.exchange}</p>
             </div>
             <div className="text-right">
               <p className="font-medium text-white">${item.price.toLocaleString("en-US", { minimumFractionDigits: 1 })}</p>
-              <p className="text-sm text-[#22c55e]">+{item.change}%</p>
+              <p className={`text-sm font-medium ${item.change >= 0 ? "text-[#22c55e]" : "text-[#ef4444]"}`}>
+                {item.change >= 0 ? "+" : ""}{item.change}%
+              </p>
             </div>
           </div>
         ))}

@@ -7,8 +7,8 @@ import { Search, Bell, Settings, Shield } from "lucide-react";
 const navItems = [
   { label: "Dashboard", href: "/" },
   { label: "Rules", href: "/rules" },
-  { label: "Portfolio", href: "#" },
-  { label: "Market", href: "#" },
+  { label: "Portfolio", href: "/portfolio" },
+  { label: "Market", href: "/market" },
 ];
 
 export default function TopBar() {
