@@ -14,6 +14,7 @@ dist
 
 # Misc
 .DS_Store
+.cursor/
 *.pem
 .env*.local
 .vercel
