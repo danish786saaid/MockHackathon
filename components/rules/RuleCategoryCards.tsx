@@ -33,7 +33,7 @@ export default function RuleCategoryCards({ rules, selectedCategoryId, onSelectC
 
   return (
     <section>
-      <h3 className="mb-3 text-sm font-semibold text-[#94a3b8]">Rule categories</h3>
+      <h3 className="mb-3 text-sm font-semibold text-[#a8a29e]">Rule categories</h3>
       <div className="flex gap-4 overflow-x-auto pb-2">
         {RULE_CATEGORIES.map((cat) => {
           const Icon = iconMap[cat.icon as keyof typeof iconMap] ?? Folder;
@@ -45,7 +45,7 @@ export default function RuleCategoryCards({ rules, selectedCategoryId, onSelectC
               key={cat.id}
               type="button"
               onClick={() => onSelectCategory(isSelected ? null : cat.id)}
-              className="glass-card flex min-w-[160px] shrink-0 flex-col items-center gap-3 rounded-xl p-5 text-left transition-all hover:border-[#22d3ee]/30"
+              className="glass-card flex min-w-[160px] shrink-0 flex-col items-center gap-3 rounded-xl p-5 text-left transition-all hover:border-[#f59e0b]/30"
             >
               <div
                 className="flex h-14 w-14 items-center justify-center rounded-xl"
@@ -54,11 +54,11 @@ export default function RuleCategoryCards({ rules, selectedCategoryId, onSelectC
                   boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
                 }}
               >
-                <Icon className="h-7 w-7 text-[#94a3b8]" />
+                <Icon className="h-7 w-7 text-[#a8a29e]" />
               </div>
               <div className="w-full">
                 <p className="truncate text-sm font-medium text-white">{cat.label}</p>
-                <p className="text-xs text-[#94a3b8]">
+                <p className="text-xs text-[#a8a29e]">
                   {count} {count === 1 ? "rule" : "rules"}
                 </p>
               </div>

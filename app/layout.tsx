@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700"] });
 
 export const metadata: Metadata = {
   title: "Sentinel AI - Command Center",
@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="min-h-screen" style={{ background: "linear-gradient(135deg, #0a0f1a 0%, #0d1424 50%, #0a0f1a 100%)", backgroundAttachment: "fixed" }}>
+        <div className="min-h-screen">
           {children}
         </div>
       </body>

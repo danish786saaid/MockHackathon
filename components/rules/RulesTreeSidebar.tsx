@@ -65,7 +65,7 @@ export default function RulesTreeSidebar({
   return (
     <aside
       className="flex w-[280px] shrink-0 flex-col border-r border-white/10 bg-black/20 backdrop-blur-xl"
-      style={{ background: "rgba(13, 20, 36, 0.6)" }}
+      style={{ background: "rgba(28, 25, 23, 0.6)" }}
     >
       <div className="flex flex-col gap-4 p-4">
         <div className="flex items-center justify-between">
@@ -73,13 +73,13 @@ export default function RulesTreeSidebar({
         </div>
 
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94a3b8]" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#a8a29e]" />
           <input
             type="text"
             placeholder="Search rules..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full rounded-lg border border-white/10 bg-white/5 py-2 pl-9 pr-3 text-sm text-white placeholder:text-[#94a3b8] focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
+            className="w-full rounded-lg border border-white/10 bg-white/5 py-2 pl-9 pr-3 text-sm text-white placeholder:text-[#a8a29e] focus:border-[#ea580c] focus:outline-none focus:ring-1 focus:ring-[#ea580c]"
           />
         </div>
 
@@ -88,9 +88,9 @@ export default function RulesTreeSidebar({
             type="button"
             onClick={() => onTabChange("categories")}
             className={`flex-1 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
-              activeTab === "categories" ? "text-white" : "text-[#94a3b8] hover:text-white"
+              activeTab === "categories" ? "text-white" : "text-[#a8a29e] hover:text-white"
             }`}
-            style={activeTab === "categories" ? { background: "#3b82f6" } : undefined}
+            style={activeTab === "categories" ? { background: "rgba(234, 88, 12, 0.2)", color: "#f97316" } : undefined}
           >
             Categories
           </button>
@@ -98,9 +98,9 @@ export default function RulesTreeSidebar({
             type="button"
             onClick={() => onTabChange("tags")}
             className={`flex-1 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
-              activeTab === "tags" ? "text-white" : "text-[#94a3b8] hover:text-white"
+              activeTab === "tags" ? "text-white" : "text-[#a8a29e] hover:text-white"
             }`}
-            style={activeTab === "tags" ? { background: "#3b82f6" } : undefined}
+            style={activeTab === "tags" ? { background: "rgba(234, 88, 12, 0.2)", color: "#f97316" } : undefined}
           >
             Tags
           </button>
@@ -122,7 +122,7 @@ export default function RulesTreeSidebar({
                       className={`flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 transition-colors ${
                         isSelected ? "" : "hover:bg-white/5"
                       }`}
-                      style={isSelected ? { background: "rgba(59, 130, 246, 0.2)" } : undefined}
+                      style={isSelected ? { background: "rgba(234, 88, 12, 0.2)", color: "#f97316" } : undefined}
                       onClick={() => onSelectCategory(isSelected ? null : cat.id)}
                     >
                       <button
@@ -135,17 +135,17 @@ export default function RulesTreeSidebar({
                         aria-label={isExpanded ? "Collapse" : "Expand"}
                       >
                         {isExpanded ? (
-                          <ChevronDown className="h-4 w-4 text-[#94a3b8]" />
+                          <ChevronDown className="h-4 w-4 text-[#a8a29e]" />
                         ) : (
-                          <ChevronRight className="h-4 w-4 text-[#94a3b8]" />
+                          <ChevronRight className="h-4 w-4 text-[#a8a29e]" />
                         )}
                       </button>
-                      <Icon className="h-4 w-4 shrink-0 text-[#94a3b8]" />
-                      <span className={`min-w-0 flex-1 truncate text-sm ${isSelected ? "font-medium text-white" : "text-[#94a3b8]"}`}>
+                      <Icon className="h-4 w-4 shrink-0 text-[#a8a29e]" />
+                      <span className={`min-w-0 flex-1 truncate text-sm ${isSelected ? "font-medium text-[#f97316]" : "text-[#a8a29e]"}`}>
                         {cat.label}
                       </span>
                       <span
-                        className="shrink-0 rounded-full bg-white/10 px-2 py-0.5 text-xs font-medium text-[#94a3b8]"
+                        className="shrink-0 rounded-full bg-white/10 px-2 py-0.5 text-xs font-medium text-[#a8a29e]"
                       >
                         {count}
                       </span>
@@ -155,13 +155,13 @@ export default function RulesTreeSidebar({
                         {categoryRules.slice(0, 5).map((r) => (
                           <li
                             key={r.id}
-                            className="flex items-center gap-2 rounded px-2 py-1 text-xs text-[#94a3b8]"
+                            className="flex items-center gap-2 rounded px-2 py-1 text-xs text-[#a8a29e]"
                           >
                             <span className="min-w-0 flex-1 truncate">{r.rule}</span>
                           </li>
                         ))}
                         {categoryRules.length > 5 && (
-                          <li className="px-2 py-1 text-xs text-[#94a3b8]">+{categoryRules.length - 5} more</li>
+                          <li className="px-2 py-1 text-xs text-[#a8a29e]">+{categoryRules.length - 5} more</li>
                         )}
                       </ul>
                     )}
@@ -170,7 +170,7 @@ export default function RulesTreeSidebar({
               })}
             </ul>
           ) : (
-            <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-4 text-center text-sm text-[#94a3b8]">
+            <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-4 text-center text-sm text-[#a8a29e]">
               Tags view — add tags to rules to filter here.
             </div>
           )}

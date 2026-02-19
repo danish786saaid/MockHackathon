@@ -71,15 +71,7 @@ export default function RulesPageContent() {
   };
 
   return (
-    <div
-      className="flex min-h-[calc(100vh-3.5rem)]"
-      style={{
-        marginLeft: 260,
-        marginRight: 320,
-        paddingTop: "calc(3.5rem + 24px)",
-        paddingBottom: 24,
-      }}
-    >
+    <div className="flex min-h-[60vh] gap-6">
       <RulesTreeSidebar
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
@@ -93,7 +85,7 @@ export default function RulesPageContent() {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="text-xl font-semibold text-white">Rules</h1>
-            <p className="text-sm text-[#94a3b8]">Manage and create risk rules for your portfolio</p>
+            <p className="text-sm text-[#78716c]">Manage and create risk rules for your portfolio</p>
           </div>
           <div className="w-full sm:w-auto sm:min-w-[320px]">
             <RuleCreateForm onSubmit={handleAddRule} />

@@ -7,48 +7,53 @@ import NewsSentimentCard from "./NewsSentimentCard";
 import RiskTrendChart from "./RiskTrendChart";
 import ActiveRulesTable from "./ActiveRulesTable";
 import CircuitBreakerCard from "./CircuitBreakerCard";
+import NotificationsCard from "./NotificationsCard";
+import LatestNewsCard from "./LatestNewsCard";
 
 export default function BentoMain() {
   return (
-    <main
-      className="bento-grid"
-      style={{
-        marginLeft: 260,
-        marginRight: 320,
-        paddingTop: "calc(3.5rem + 24px)",
-        paddingLeft: 24,
-        paddingRight: 24,
-        paddingBottom: 24,
-        minHeight: "calc(100vh - 3.5rem)",
-      }}
-    >
-      {/* Row 1: Portfolio Value (4 col) + KPI 2×2 grid (8 col) */}
-      <div className="col-span-4 h-full">
-        <PortfolioValueCard />
-      </div>
-      <div className="col-span-8 h-full">
-        <KpiCardsRow />
+    <main className="mx-auto max-w-[1440px] px-8 pb-12 pt-8">
+      {/* Page header */}
+      <div className="mb-8">
+        <h1 className="text-2xl font-semibold tracking-tight text-white">Dashboard</h1>
+        <p className="mt-1 text-sm text-[#78716c]">Welcome back, Naya. Here&apos;s your portfolio overview.</p>
       </div>
 
-      {/* Row 2: Trust Gauge (4 col) + News Sentiment (8 col) */}
-      <div className="col-span-4 h-full">
-        <TrustGaugeCard />
-      </div>
-      <div className="col-span-8 h-full">
-        <NewsSentimentCard />
-      </div>
+      <div className="bento-grid">
+        {/* Row 1: Portfolio hero (5 col) + KPI cards (7 col) */}
+        <div className="col-span-5">
+          <PortfolioValueCard />
+        </div>
+        <div className="col-span-7">
+          <KpiCardsRow />
+        </div>
 
-      {/* Row 3: Risk Trend full width */}
-      <div className="col-span-12">
-        <RiskTrendChart />
-      </div>
+        {/* Row 2: Risk chart (8 col) + Trust gauge (4 col) */}
+        <div className="col-span-8">
+          <RiskTrendChart />
+        </div>
+        <div className="col-span-4">
+          <TrustGaugeCard />
+        </div>
 
-      {/* Row 4: Active Rules (8 col) + Circuit Breaker (4 col) */}
-      <div className="col-span-8 h-full">
-        <ActiveRulesTable />
-      </div>
-      <div className="col-span-4 h-full">
-        <CircuitBreakerCard />
+        {/* Row 3: Active rules (5 col) + Sentiment (3 col) + Notifications (4 col) */}
+        <div className="col-span-5">
+          <ActiveRulesTable />
+        </div>
+        <div className="col-span-3">
+          <NewsSentimentCard />
+        </div>
+        <div className="col-span-4">
+          <NotificationsCard />
+        </div>
+
+        {/* Row 4: Latest News (8 col) + Circuit breaker (4 col) */}
+        <div className="col-span-8">
+          <LatestNewsCard />
+        </div>
+        <div className="col-span-4">
+          <CircuitBreakerCard />
+        </div>
       </div>
     </main>
   );

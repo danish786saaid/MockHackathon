@@ -190,3 +190,54 @@ export const MOCK_SENTIMENT = [
   { name: "Warning", value: 18, color: "#f59e0b" },
   { name: "Danger", value: 10, color: "#ef4444" },
 ];
+
+// Placeholder mock data — will be replaced by backend API (GET /api/news)
+export const MOCK_NEWS: {
+  id: string;
+  title: string;
+  source: string;
+  time: string;
+  sentiment: "positive" | "neutral" | "negative";
+  url: string;
+}[] = [
+  {
+    id: "n1",
+    title: "Bitcoin ETF inflows hit record $1.2B in single day",
+    source: "CoinDesk",
+    time: "12 min ago",
+    sentiment: "positive",
+    url: "#",
+  },
+  {
+    id: "n2",
+    title: "SEC delays decision on Ethereum spot ETF application",
+    source: "Bloomberg",
+    time: "45 min ago",
+    sentiment: "neutral",
+    url: "#",
+  },
+  {
+    id: "n3",
+    title: "Major DeFi protocol suffers $8M exploit via flash loan",
+    source: "The Block",
+    time: "2 hours ago",
+    sentiment: "negative",
+    url: "#",
+  },
+  {
+    id: "n4",
+    title: "Fed minutes signal potential rate pause through Q3",
+    source: "Reuters",
+    time: "3 hours ago",
+    sentiment: "positive",
+    url: "#",
+  },
+  {
+    id: "n5",
+    title: "South Korea announces new crypto tax framework for 2027",
+    source: "Nikkei Asia",
+    time: "5 hours ago",
+    sentiment: "neutral",
+    url: "#",
+  },
+];

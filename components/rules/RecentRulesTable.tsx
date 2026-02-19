@@ -29,7 +29,7 @@ export default function RecentRulesTable({ rules, onToggleStatus, onDelete }: Pr
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-white/10 text-left text-[#94a3b8]">
+            <tr className="border-b border-white/10 text-left text-[#a8a29e]">
               <th className="pb-3 pl-6 pr-4 font-medium">Rule</th>
               <th className="pb-3 px-4 font-medium">Category</th>
               <th className="pb-3 px-4 font-medium">Status</th>
@@ -44,16 +44,16 @@ export default function RecentRulesTable({ rules, onToggleStatus, onDelete }: Pr
                     <div
                       className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
                       style={{
-                        background: r.status === "active" ? "rgba(34, 197, 94, 0.2)" : "rgba(148, 163, 184, 0.15)",
+                        background: r.status === "active" ? "rgba(34, 197, 94, 0.2)" : "rgba(168, 162, 158, 0.15)",
                       }}
                     >
-                      <Shield className="h-4 w-4" style={{ color: r.status === "active" ? "#22c55e" : "#94a3b8" }} />
+                      <Shield className="h-4 w-4" style={{ color: r.status === "active" ? "#22c55e" : "#a8a29e" }} />
                     </div>
                     <span className="text-white">{r.rule}</span>
                   </div>
                 </td>
-                <td className="py-3 px-4 text-[#94a3b8]">{categoryLabelMap[r.category]}</td>
-                <td className="py-3 px-4 font-medium" style={{ color: r.status === "active" ? "#22c55e" : "#94a3b8" }}>
+                <td className="py-3 px-4 text-[#a8a29e]">{categoryLabelMap[r.category]}</td>
+                <td className="py-3 px-4 font-medium" style={{ color: r.status === "active" ? "#22c55e" : "#a8a29e" }}>
                   {r.status === "active" ? "Active" : "Paused"}
                 </td>
                 <td className="py-3 pr-6 pl-4 text-right">
@@ -61,7 +61,7 @@ export default function RecentRulesTable({ rules, onToggleStatus, onDelete }: Pr
                     <button
                       type="button"
                       onClick={() => onToggleStatus(r.id)}
-                      className="rounded p-1.5 text-[#94a3b8] transition-colors hover:bg-white/10 hover:text-white"
+                      className="rounded p-1.5 text-[#a8a29e] transition-colors hover:bg-white/10 hover:text-white"
                       title={r.status === "active" ? "Pause" : "Activate"}
                       aria-label={r.status === "active" ? "Pause rule" : "Activate rule"}
                     >
@@ -70,7 +70,7 @@ export default function RecentRulesTable({ rules, onToggleStatus, onDelete }: Pr
                     <button
                       type="button"
                       onClick={() => onDelete(r.id)}
-                      className="rounded p-1.5 text-[#94a3b8] transition-colors hover:bg-white/10 hover:text-[#ef4444]"
+                      className="rounded p-1.5 text-[#a8a29e] transition-colors hover:bg-white/10 hover:text-[#ef4444]"
                       title="Delete"
                       aria-label="Delete rule"
                     >

@@ -1,6 +1,4 @@
 import TopBar from "@/components/sentinel/TopBar";
-import LeftSidebar from "@/components/sentinel/LeftSidebar";
-import RightPanel from "@/components/sentinel/RightPanel";
 
 export default function RulesLayout({
   children,
@@ -10,9 +8,9 @@ export default function RulesLayout({
   return (
     <>
       <TopBar />
-      <LeftSidebar />
-      <RightPanel />
-      {children}
+      <main className="mx-auto max-w-[1440px] px-8 pb-12 pt-8">
+        {children}
+      </main>
     </>
   );
 }
