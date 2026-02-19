@@ -16,14 +16,14 @@ export default function MyPortfolioRow({ onSeeAllClick }: MyPortfolioRowProps) {
           <button
             type="button"
             onClick={onSeeAllClick}
-            className="flex items-center gap-1 text-sm text-[#ea580c] hover:text-[#f97316]"
+            className="flex items-center gap-1 text-sm text-[#3b82f6] hover:text-[#60a5fa]"
           >
             See all <ChevronRight className="h-4 w-4" />
           </button>
         ) : (
           <a
             href="#portfolio-overview"
-            className="flex items-center gap-1 text-sm text-[#ea580c] hover:text-[#f97316]"
+            className="flex items-center gap-1 text-sm text-[#3b82f6] hover:text-[#60a5fa]"
           >
             See all <ChevronRight className="h-4 w-4" />
           </a>
@@ -39,7 +39,7 @@ export default function MyPortfolioRow({ onSeeAllClick }: MyPortfolioRowProps) {
             <p className={`text-sm font-medium ${s.change >= 0 ? "text-[#22c55e]" : "text-[#ef4444]"}`}>
               {s.change >= 0 ? "+" : ""}{s.change}%
             </p>
-            <p className="mt-1 truncate text-xs text-[#78716c]" title={`${s.ticker}, Units ${s.units}`}>
+            <p className="mt-1 truncate text-xs text-[#94a3b8]" title={`${s.ticker}, Units ${s.units}`}>
               {s.ticker}, Units {s.units}
             </p>
           </div>
