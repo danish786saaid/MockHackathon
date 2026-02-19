@@ -21,7 +21,7 @@ export default function PortfolioOverviewTable() {
   return (
     <div className="glass-card p-6">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-base font-semibold text-white">Portfolio Overview</h3>
+        <h3 className="text-theme-primary text-base font-semibold">Portfolio Overview</h3>
         <div className="flex shrink-0 gap-0 rounded-lg border border-white/[0.06] bg-white/[0.03] p-0.5">
           {FILTERS.map((f) => (
             <button
@@ -30,7 +30,7 @@ export default function PortfolioOverviewTable() {
               className={`min-w-[4rem] rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
                 activeFilter === f
                   ? "text-white"
-                  : "text-[#78716c] hover:bg-white/[0.04] hover:text-white"
+                  : "text-theme-muted hover:bg-white/[0.04] hover:text-theme-primary"
               }`}
               style={activeFilter === f ? { background: "rgba(234, 88, 12, 0.15)", color: "#f97316" } : undefined}
             >
@@ -42,7 +42,7 @@ export default function PortfolioOverviewTable() {
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-white/[0.06] text-left text-[#78716c]">
+            <tr className="text-theme-muted border-b border-white/[0.06] text-left">
               <th className="pb-3 font-medium">Stock</th>
               <th className="pb-3 font-medium">Last Price</th>
               <th className="pb-3 font-medium">Change</th>
@@ -53,14 +53,14 @@ export default function PortfolioOverviewTable() {
           </thead>
           <tbody>
             {filteredRows.map((row) => (
-              <tr key={row.stock} className="border-b border-white/[0.04] text-white">
+              <tr key={row.stock} className="text-theme-primary border-b border-white/[0.04]">
                 <td className="py-3 font-medium">{row.stock}</td>
                 <td className="py-3">${row.lastPrice.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
                 <td className={`py-3 font-medium ${row.change >= 0 ? "text-[#22c55e]" : "text-[#ef4444]"}`}>
                   {row.change >= 0 ? "+" : ""}{row.change}%
                 </td>
-                <td className="py-3 text-[#78716c]">${row.marketCap}</td>
-                <td className="py-3 text-[#78716c]">${row.volume}</td>
+                <td className="text-theme-muted py-3">${row.marketCap}</td>
+                <td className="text-theme-muted py-3">${row.volume}</td>
                 <td className="py-3 w-20">
                   <div className="h-8 w-16">
                     <ResponsiveContainer width="100%" height="100%">

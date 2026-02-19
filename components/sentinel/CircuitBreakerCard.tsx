@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { Zap, ArrowRight } from "lucide-react";
+import { useTranslation } from "@/lib/i18n/use-translation";
 
 export default function CircuitBreakerCard() {
+  const { t } = useTranslation();
   const [simulated, setSimulated] = useState(false);
 
   const handleSimulate = () => {
@@ -18,11 +20,9 @@ export default function CircuitBreakerCard() {
           <Zap className="h-5 w-5 text-[#ea580c]" />
         </div>
         <div>
-          <h3 className="text-base font-semibold text-white">Circuit Breaker</h3>
-          <p className="mt-0.5 text-sm text-[#78716c]">
-            {simulated
-              ? "Mock transaction simulated. No real funds moved."
-              : "AI detects high-risk events and triggers protective actions matching your rules."}
+          <h3 className="text-theme-primary text-base font-semibold">{t("dashboard.circuitBreaker")}</h3>
+          <p className="text-theme-muted mt-0.5 text-sm">
+            {simulated ? t("dashboard.circuitBreakerSimulated") : t("dashboard.circuitBreakerDesc")}
           </p>
         </div>
       </div>
@@ -32,7 +32,7 @@ export default function CircuitBreakerCard() {
         className="group flex shrink-0 items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold text-white transition-all hover:opacity-90"
         style={{ background: "linear-gradient(135deg, #ea580c, #f59e0b)" }}
       >
-        {simulated ? "Simulated ✓" : "Simulate"}
+        {simulated ? t("dashboard.simulatedDone") : t("dashboard.simulate")}
         {!simulated && <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />}
       </button>
     </div>

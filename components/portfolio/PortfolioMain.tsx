@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslation } from "@/lib/i18n/use-translation";
 import TotalHoldingCard from "@/components/stovest/TotalHoldingCard";
 import MyPortfolioRow from "@/components/stovest/MyPortfolioRow";
 import PortfolioPerformanceChart from "@/components/stovest/PortfolioPerformanceChart";
@@ -9,6 +10,7 @@ import WatchlistSection from "@/components/stovest/WatchlistSection";
 import { PORTFOLIO_STOCKS } from "@/lib/stovest-data";
 
 export default function PortfolioMain() {
+  const { t } = useTranslation();
   const [profileImgError, setProfileImgError] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [seeAllOpen, setSeeAllOpen] = useState(false);
@@ -16,7 +18,7 @@ export default function PortfolioMain() {
   return (
     <main className="min-h-[calc(100vh-4rem)]">
       {/* Portfolio-only header: no sidebars, no notifications */}
-      <header className="border-b border-white/[0.06] bg-white/[0.02]">
+      <header className="border-b border-white/[0.06] bg-white/[0.02] [border-color:var(--glass-border)] [background:var(--glass-bg)]">
         <div className="mx-auto max-w-[1200px] px-6 py-6 sm:px-8">
           <button
             type="button"
@@ -35,12 +37,12 @@ export default function PortfolioMain() {
                   onError={() => setProfileImgError(true)}
                 />
               ) : (
-                <span className="text-base font-bold text-white sm:text-lg">NR</span>
+                <span className="text-theme-primary text-base font-bold sm:text-lg">NR</span>
               )}
             </div>
             <div>
-              <h1 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">Portfolio</h1>
-              <p className="text-sm text-[#78716c]">Naya Rochel · Holdings, performance & watchlist</p>
+              <h1 className="text-theme-primary text-xl font-semibold tracking-tight sm:text-2xl">{t("portfolio.title")}</h1>
+              <p className="text-theme-muted text-sm">{t("portfolio.subtitle")}</p>
             </div>
           </button>
         </div>

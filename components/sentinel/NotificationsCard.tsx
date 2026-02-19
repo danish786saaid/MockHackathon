@@ -1,6 +1,7 @@
 "use client";
 
 import { CheckCircle, AlertTriangle, XCircle } from "lucide-react";
+import { useTranslation } from "@/lib/i18n/use-translation";
 import { MOCK_ALERTS } from "@/lib/constants";
 
 const severityConfig = {
@@ -10,12 +11,13 @@ const severityConfig = {
 };
 
 export default function NotificationsCard() {
+  const { t } = useTranslation();
   return (
     <div className="glass-card flex h-full flex-col overflow-hidden">
       <div className="flex items-center justify-between border-b border-white/[0.08] px-6 py-4">
-        <h3 className="text-base font-semibold text-white">Notifications</h3>
+        <h3 className="text-theme-primary text-base font-semibold">{t("dashboard.notifications")}</h3>
         <span className="rounded-full bg-[#ea580c]/10 px-2.5 py-1 text-[11px] font-medium text-[#ea580c]">
-          {MOCK_ALERTS.length} new
+          {MOCK_ALERTS.length} {t("dashboard.new")}
         </span>
       </div>
       <div className="flex-1 overflow-y-auto">
@@ -34,11 +36,11 @@ export default function NotificationsCard() {
                 <Icon className="h-4 w-4" style={{ color: config.color }} />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium text-white">{alert.title}</p>
+                <p className="text-theme-primary text-sm font-medium">{alert.title}</p>
                 {alert.matchedRule && (
-                  <p className="mt-0.5 text-xs text-[#a8a29e]">Rule: {alert.matchedRule}</p>
+                  <p className="text-theme-secondary mt-0.5 text-xs">{t("dashboard.ruleLabel")}: {alert.matchedRule}</p>
                 )}
-                <p className="mt-0.5 text-[10px] text-[#78716c]">{alert.time}</p>
+                <p className="text-theme-muted mt-0.5 text-[10px]">{alert.time}</p>
               </div>
             </div>
           );

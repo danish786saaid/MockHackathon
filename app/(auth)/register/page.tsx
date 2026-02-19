@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Mail, Lock, User, Shield } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
+import { useTranslation } from "@/lib/i18n/use-translation";
 
 const inputClass =
   "w-full rounded-xl border border-white/[0.06] bg-white/[0.03] py-3 pl-10 pr-4 text-sm text-white placeholder-[#78716c] transition-colors focus:border-[#ea580c]/30 focus:outline-none focus:bg-white/[0.05]";
@@ -23,6 +24,7 @@ function passwordStrength(pwd: string): { score: number; label: string } {
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { t } = useTranslation();
   const { register } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -38,15 +40,15 @@ export default function RegisterPage() {
     e.preventDefault();
     setError("");
     if (!name.trim()) {
-      setError("Enter your name");
+      setError(t("auth.enterName"));
       return;
     }
     if (!email.trim()) {
-      setError("Enter your email");
+      setError(t("auth.enterEmail"));
       return;
     }
     if (password.length < 8) {
-      setError("Password must be at least 8 characters");
+      setError(t("settings.passwordRequirements"));
       return;
     }
     if (password !== confirm) {
@@ -63,7 +65,7 @@ export default function RegisterPage() {
       router.push("/onboarding");
       router.refresh();
     } catch {
-      setError("Something went wrong. Please try again.");
+      setError(t("auth.somethingWrong"));
     } finally {
       setLoading(false);
     }
@@ -73,10 +75,10 @@ export default function RegisterPage() {
     <div className="glass-card p-8">
       <div className="mb-8">
         <h1 className="text-2xl font-semibold tracking-tight text-white">
-          Create account
+          {t("auth.createAccount")}
         </h1>
         <p className="mt-1 text-sm text-[#78716c]">
-          Get started with Sentinel. No credit card required.
+          {t("auth.getStartedSubtitle")}
         </p>
       </div>
 
@@ -89,7 +91,7 @@ export default function RegisterPage() {
 
         <div>
           <label className="mb-1.5 block text-xs font-medium text-[#a8a29e]">
-            Full name
+            {t("auth.name")}
           </label>
           <div className="relative">
             <User className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#78716c]" />
@@ -106,7 +108,7 @@ export default function RegisterPage() {
 
         <div>
           <label className="mb-1.5 block text-xs font-medium text-[#a8a29e]">
-            Email
+            {t("auth.email")}
           </label>
           <div className="relative">
             <Mail className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#78716c]" />
@@ -123,7 +125,7 @@ export default function RegisterPage() {
 
         <div>
           <label className="mb-1.5 block text-xs font-medium text-[#a8a29e]">
-            Password
+            {t("auth.password")}
           </label>
           <div className="relative">
             <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#78716c]" />
@@ -163,7 +165,7 @@ export default function RegisterPage() {
 
         <div>
           <label className="mb-1.5 block text-xs font-medium text-[#a8a29e]">
-            Confirm password
+            {t("settings.confirmPassword")}
           </label>
           <div className="relative">
             <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#78716c]" />
@@ -205,7 +207,7 @@ export default function RegisterPage() {
             background: "linear-gradient(135deg, #ea580c, #f59e0b)",
           }}
         >
-          {loading ? "Creating account…" : "Create account"}
+          {loading ? t("auth.creatingAccount") : t("auth.createAccount")}
         </button>
       </form>
 
@@ -215,7 +217,7 @@ export default function RegisterPage() {
         </div>
         <div className="relative flex justify-center text-xs">
           <span className="bg-[#1c1917] px-3 text-[#78716c]">
-            Or continue with
+            {t("auth.orContinueWith")}
           </span>
         </div>
       </div>
@@ -225,16 +227,16 @@ export default function RegisterPage() {
         className="w-full flex items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] py-3 text-sm text-[#a8a29e] transition-colors hover:bg-white/[0.06] hover:text-white"
       >
         <Shield className="h-4 w-4" />
-        Sign up with Google
+        {t("auth.signUpWithGoogle")}
       </button>
 
       <p className="mt-6 text-center text-sm text-[#78716c]">
-        Already have an account?{" "}
+        {t("auth.hasAccount")}{" "}
         <Link
           href="/login"
           className="font-medium text-[#f97316] hover:text-[#ea580c] transition-colors"
         >
-          Sign in
+          {t("auth.signIn")}
         </Link>
       </p>
     </div>

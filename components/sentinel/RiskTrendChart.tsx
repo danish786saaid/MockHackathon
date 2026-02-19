@@ -2,17 +2,19 @@
 
 import { useState } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { useTranslation } from "@/lib/i18n/use-translation";
 import { MOCK_RISK_TREND } from "@/lib/constants";
 
 const RANGE_BUTTONS = ["D", "1W", "1M", "6M", "1Y"];
 
 export default function RiskTrendChart() {
+  const { t } = useTranslation();
   const [activeRange, setActiveRange] = useState("6M");
 
   return (
     <div className="glass-card h-full p-6">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-base font-semibold text-white">Risk Trend</h3>
+        <h3 className="text-theme-primary text-base font-semibold">{t("dashboard.riskTrend")}</h3>
         <div className="flex gap-1 rounded-lg p-1 bg-white/[0.05]">
           {RANGE_BUTTONS.map((r) => (
             <button

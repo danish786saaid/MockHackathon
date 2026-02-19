@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { Bell, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 import { useUser } from "@/contexts/UserContext";
+import { usePreferences } from "@/contexts/PreferencesContext";
+import { formatRelativeTime } from "@/lib/format-date";
 
 type Alert = { id: string; title: string; severity: "safe" | "warning" | "danger"; matched_rule: string | null; created_at: string };
 
@@ -13,17 +15,9 @@ const severityConfig = {
   danger: { icon: XCircle, color: "#ef4444", bg: "rgba(239, 68, 68, 0.15)" },
 };
 
-function formatTime(iso: string) {
-  const d = new Date(iso);
-  const diff = Math.floor((Date.now() - d.getTime()) / 60000);
-  if (diff < 1) return "Just now";
-  if (diff < 60) return `${diff} min ago`;
-  if (diff < 1440) return `${Math.floor(diff / 60)} hour${diff >= 120 ? "s" : ""} ago`;
-  return `${Math.floor(diff / 1440)} day${diff >= 2880 ? "s" : ""} ago`;
-}
-
 export default function AlertsFeed() {
   const user = useUser();
+  const { timezone } = usePreferences();
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -112,7 +106,7 @@ export default function AlertsFeed() {
                   {alert.matched_rule && (
                     <p className="mt-1 text-xs text-[#94a3b8]">Rule: {alert.matched_rule}</p>
                   )}
-                  <p className="mt-1 text-[10px] text-[#94a3b8]/80">{formatTime(alert.created_at)}</p>
+                  <p className="mt-1 text-[10px] text-[#94a3b8]/80">{formatRelativeTime(alert.created_at, timezone)}</p>
                 </div>
               </div>
             </div>
