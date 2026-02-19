@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuth } from "@/lib/auth-context";
 import PortfolioValueCard from "./PortfolioValueCard";
 import KpiCardsRow from "./KpiCardsRow";
 import TrustGaugeCard from "./TrustGaugeCard";
@@ -11,12 +12,15 @@ import NotificationsCard from "./NotificationsCard";
 import LatestNewsCard from "./LatestNewsCard";
 
 export default function BentoMain() {
+  const { user } = useAuth();
+  const firstName = user?.name?.split(/\s+/)[0] ?? "there";
+
   return (
     <main className="mx-auto max-w-[1440px] px-8 pb-12 pt-8">
       {/* Page header */}
       <div className="mb-8">
         <h1 className="text-2xl font-semibold tracking-tight text-white">Dashboard</h1>
-        <p className="mt-1 text-sm text-[#78716c]">Welcome back, Naya. Here&apos;s your portfolio overview.</p>
+        <p className="mt-1 text-sm text-[#78716c]">Welcome back, {firstName}. Here&apos;s your portfolio overview.</p>
       </div>
 
       <div className="bento-grid">

@@ -1,18 +1,45 @@
 "use client";
 
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Search, Bell, Settings, Shield } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Search, Bell, Settings, Shield, LogOut } from "lucide-react";
+import { useAuth, initials } from "@/lib/auth-context";
 
 const navItems = [
   { label: "Dashboard", href: "/" },
   { label: "Rules", href: "/rules" },
-  { label: "Portfolio", href: "#" },
-  { label: "Market", href: "#" },
+  { label: "Portfolio", href: "/portfolio" },
+  { label: "Market", href: "/market" },
 ];
 
 export default function TopBar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, logout } = useAuth();
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setUserMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  function handleLogout() {
+    logout();
+    setUserMenuOpen(false);
+    router.push("/login");
+    router.refresh();
+  }
+
+  const displayName = user?.name ?? "Guest";
+  const displayHandle = user?.handle ?? "@guest";
+  const initialsStr = user ? initials(user.name) : "G";
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/[0.06]" style={{ background: "rgba(12, 10, 9, 0.85)", backdropFilter: "blur(40px) saturate(1.4)", WebkitBackdropFilter: "blur(40px) saturate(1.4)" }}>
@@ -72,17 +99,35 @@ export default function TopBar() {
             <Settings className="h-[18px] w-[18px]" />
           </button>
 
-          <div className="ml-2 flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.03] py-1.5 pl-1.5 pr-4">
-            <div
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-bold text-white"
-              style={{ background: "linear-gradient(135deg, #ea580c, #f59e0b)" }}
+          <div className="ml-2 relative" ref={menuRef}>
+            <button
+              type="button"
+              onClick={() => setUserMenuOpen(!userMenuOpen)}
+              className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.03] py-1.5 pl-1.5 pr-4 hover:bg-white/[0.05] transition-colors"
             >
-              NR
-            </div>
-            <div className="hidden sm:block">
-              <p className="text-sm font-medium text-white leading-tight">Naya Rochel</p>
-              <p className="text-[11px] text-[#78716c]">@naya_rochel</p>
-            </div>
+              <div
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-bold text-white"
+                style={{ background: "linear-gradient(135deg, #ea580c, #f59e0b)" }}
+              >
+                {initialsStr}
+              </div>
+              <div className="hidden sm:block text-left">
+                <p className="text-sm font-medium text-white leading-tight">{displayName}</p>
+                <p className="text-[11px] text-[#78716c]">{displayHandle}</p>
+              </div>
+            </button>
+            {userMenuOpen && (
+              <div className="absolute right-0 top-full mt-1 w-48 rounded-xl border border-white/[0.08] bg-[#1c1917] py-1 shadow-xl z-50">
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-[#a8a29e] hover:bg-white/[0.06] hover:text-white transition-colors"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Log out
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
