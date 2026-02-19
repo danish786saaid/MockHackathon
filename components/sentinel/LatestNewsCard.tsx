@@ -1,11 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ExternalLink, TrendingUp, TrendingDown, Minus } from "lucide-react";
-import { supabase } from "@/lib/supabaseClient";
-import { useUser } from "@/contexts/UserContext";
+import { ExternalLink, TrendingUp, TrendingDown, Minus, RefreshCw } from "lucide-react";
 
-type NewsItem = { id: string; headline: string; source: string | null; created_at: string };
+type NewsArticle = {
+  id: string;
+  headline: string;
+  source: string;
+  url: string;
+  publishedAt: string;
+};
 
 const sentimentConfig = {
   positive: { icon: TrendingUp, color: "#22c55e", label: "Positive" },
@@ -22,37 +26,63 @@ function formatTime(iso: string) {
   return `${Math.floor(diff / 1440)}d ago`;
 }
 
+function guessSentiment(headline: string): "positive" | "neutral" | "negative" {
+  const lower = headline.toLowerCase();
+  const positiveWords = ["surge", "rally", "gain", "rise", "record", "boost", "growth", "profit", "up", "high", "bull", "soar"];
+  const negativeWords = ["crash", "drop", "fall", "loss", "decline", "risk", "fear", "warning", "exploit", "hack", "down", "bear", "slump", "cut"];
+  if (positiveWords.some((w) => lower.includes(w))) return "positive";
+  if (negativeWords.some((w) => lower.includes(w))) return "negative";
+  return "neutral";
+}
+
 export default function LatestNewsCard() {
-  const user = useUser();
-  const [articles, setArticles] = useState<NewsItem[]>([]);
+  const [articles, setArticles] = useState<NewsArticle[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  async function fetchNews() {
+    try {
+      const res = await fetch("/api/news");
+      if (!res.ok) throw new Error("Failed to fetch");
+      const data = await res.json();
+      setArticles(data.articles ?? []);
+    } catch {
+      setArticles([]);
+    }
+  }
 
   useEffect(() => {
-    if (!user?.id) return;
-    supabase
-      .from("news_feed")
-      .select("id, headline, source, created_at")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false })
-      .limit(10)
-      .then(({ data, error }) => {
-        if (!error && data?.length) setArticles(data as NewsItem[]);
-        else setArticles([]);
-        setLoading(false);
-      });
-  }, [user?.id]);
+    fetchNews().finally(() => setLoading(false));
+    const interval = setInterval(fetchNews, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  async function handleRefresh() {
+    setRefreshing(true);
+    await fetchNews();
+    setRefreshing(false);
+  }
 
   return (
     <div className="glass-card flex h-full flex-col overflow-hidden">
       <div className="flex items-center justify-between border-b border-white/[0.06] px-7 py-5">
         <div>
           <h3 className="text-base font-semibold text-white">Latest News</h3>
-          <p className="mt-0.5 text-[11px] text-[#78716c]">Live feed — powered by API</p>
+          <p className="mt-0.5 text-[11px] text-[#78716c]">Live business feed — powered by NewsAPI</p>
         </div>
-        <span className="flex items-center gap-1.5 rounded-full bg-[#ea580c]/10 px-2.5 py-1 text-[11px] font-medium text-[#ea580c]">
-          <span className="h-1.5 w-1.5 rounded-full bg-[#ea580c] animate-pulse" />
-          Live
-        </span>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleRefresh}
+            disabled={refreshing}
+            className="rounded-lg p-1.5 text-[#78716c] transition-colors hover:bg-white/[0.05] hover:text-white disabled:opacity-50"
+          >
+            <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`} />
+          </button>
+          <span className="flex items-center gap-1.5 rounded-full bg-[#ea580c]/10 px-2.5 py-1 text-[11px] font-medium text-[#ea580c]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#ea580c] animate-pulse" />
+            Live
+          </span>
+        </div>
       </div>
 
       <div className="flex-1 overflow-y-auto">
@@ -61,36 +91,42 @@ export default function LatestNewsCard() {
             <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#ea580c] border-t-transparent" />
           </div>
         ) : articles.length === 0 ? (
-          <p className="px-7 py-8 text-sm text-[#78716c]">No news yet.</p>
-        ) : articles.map((article) => {
-          const config = sentimentConfig.neutral;
-          const Icon = config.icon;
-          return (
-            <div
-              key={article.id}
-              className="group flex gap-4 border-b border-white/[0.04] px-7 py-4 transition-colors hover:bg-white/[0.02]"
-            >
-              <div
-                className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-                style={{ background: `${config.color}15` }}
+          <p className="px-7 py-8 text-sm text-[#78716c]">No news available.</p>
+        ) : (
+          articles.map((article) => {
+            const sentiment = guessSentiment(article.headline);
+            const config = sentimentConfig[sentiment];
+            const Icon = config.icon;
+            return (
+              <a
+                key={article.id}
+                href={article.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex gap-4 border-b border-white/[0.04] px-7 py-4 transition-colors hover:bg-white/[0.02]"
               >
-                <Icon className="h-4 w-4" style={{ color: config.color }} />
-              </div>
-
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium leading-snug text-white">
-                  {article.headline}
-                </p>
-                <div className="mt-1.5 flex items-center gap-3">
-                  <span className="text-[11px] font-medium text-[#a8a29e]">{article.source || "—"}</span>
-                  <span className="text-[11px] text-[#78716c]">{formatTime(article.created_at)}</span>
+                <div
+                  className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                  style={{ background: `${config.color}15` }}
+                >
+                  <Icon className="h-4 w-4" style={{ color: config.color }} />
                 </div>
-              </div>
 
-              <ExternalLink className="mt-1 h-3.5 w-3.5 shrink-0 text-[#78716c] opacity-0 transition-opacity group-hover:opacity-100" />
-            </div>
-          );
-        })}
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium leading-snug text-white group-hover:text-[#f97316] transition-colors">
+                    {article.headline}
+                  </p>
+                  <div className="mt-1.5 flex items-center gap-3">
+                    <span className="text-[11px] font-medium text-[#a8a29e]">{article.source}</span>
+                    <span className="text-[11px] text-[#78716c]">{formatTime(article.publishedAt)}</span>
+                  </div>
+                </div>
+
+                <ExternalLink className="mt-1 h-3.5 w-3.5 shrink-0 text-[#78716c] opacity-0 transition-opacity group-hover:opacity-100" />
+              </a>
+            );
+          })
+        )}
       </div>
     </div>
   );

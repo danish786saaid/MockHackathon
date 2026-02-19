@@ -3,13 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, Shield, Wallet, TrendingUp, Users, HelpCircle } from "lucide-react";
-import { useUser } from "@/contexts/UserContext";
 
 const mainMenu = [
   { label: "Dashboard", icon: LayoutDashboard, href: "/" },
   { label: "Rules", icon: Shield, href: "/rules" },
-  { label: "Portfolio", icon: Wallet, href: "#" },
-  { label: "Market", icon: TrendingUp, href: "#" },
+  { label: "Portfolio", icon: Wallet, href: "/portfolio" },
+  { label: "Market", icon: TrendingUp, href: "/market" },
 ];
 
 const supportMenu = [
@@ -18,9 +17,7 @@ const supportMenu = [
 ];
 
 export default function LeftSidebar() {
-  const user = useUser();
   const pathname = usePathname();
-  const userName = user?.name ? user.name.split(" ")[0] : "User";
 
   return (
     <aside
@@ -29,22 +26,22 @@ export default function LeftSidebar() {
     >
       <div className="flex h-full flex-col p-6">
         <div className="mb-8">
-          <h2 className="text-lg font-semibold text-white">Welcome, {userName}</h2>
+          <h2 className="text-lg font-semibold text-white">Welcome, Naya</h2>
           <p className="mt-1 text-sm text-[#94a3b8]">Here&apos;s your risk overview</p>
         </div>
 
         <nav className="space-y-1">
           <p className="mb-3 text-[10px] font-semibold uppercase tracking-widest text-[#94a3b8]">Main Menu</p>
           {mainMenu.map((item) => {
-            const isActive = pathname === item.href;
+            const active = pathname === item.href;
             return (
               <Link
                 key={item.label}
                 href={item.href}
                 className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${
-                  isActive ? "text-white" : "text-[#94a3b8] hover:bg-white/5 hover:text-white"
+                  active ? "text-white" : "text-[#94a3b8] hover:bg-white/5 hover:text-white"
                 }`}
-                style={isActive ? { background: "#3b82f6" } : undefined}
+                style={active ? { background: "#3b82f6" } : undefined}
               >
                 <item.icon className="h-4 w-4 shrink-0" />
                 {item.label}
@@ -56,14 +53,14 @@ export default function LeftSidebar() {
         <nav className="mt-8 space-y-1">
           <p className="mb-3 text-[10px] font-semibold uppercase tracking-widest text-[#94a3b8]">Support</p>
           {supportMenu.map((item) => (
-            <a
+            <Link
               key={item.label}
-              href="#"
+              href={item.href}
               className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-[#94a3b8] transition-colors hover:bg-white/5 hover:text-white"
             >
               <item.icon className="h-4 w-4 shrink-0" />
               {item.label}
-            </a>
+            </Link>
           ))}
         </nav>
       </div>

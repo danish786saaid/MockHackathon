@@ -2,43 +2,30 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import { useAuth } from "@/lib/auth-context";
 
 export type User = { id: string; name: string | null; email: string | null } | null;
 
 const UserContext = createContext<User>(null);
 
-const STORAGE_KEY = "sentinel_user_id";
-
 export function UserProvider({ children }: { children: ReactNode }) {
+  const { user: authUser } = useAuth();
   const [user, setUser] = useState<User>(null);
 
   useEffect(() => {
-    async function loadUser() {
-      const storedId = typeof window !== "undefined" ? localStorage.getItem(STORAGE_KEY) : null;
-      if (storedId) {
-        const { data } = await supabase.from("users").select("id, name, email").eq("id", storedId).maybeSingle();
-        if (data) {
-          setUser({ id: data.id, name: data.name, email: data.email });
-          return;
-        }
-      }
-      const { data } = await supabase
-        .from("users")
-        .select("id, name, email")
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-      if (data) {
-        setUser({ id: data.id, name: data.name, email: data.email });
-        if (typeof window !== "undefined") localStorage.setItem(STORAGE_KEY, data.id);
-      } else setUser(null);
+    if (!authUser?.id) {
+      setUser(null);
+      return;
     }
-    loadUser();
-    if (typeof window === "undefined") return;
-    const onUserChange = () => loadUser();
-    window.addEventListener(USER_CHANGE_EVENT, onUserChange);
-    return () => window.removeEventListener(USER_CHANGE_EVENT, onUserChange);
-  }, []);
+    supabase
+      .from("users")
+      .select("id, name, email")
+      .eq("id", authUser.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        setUser(data ? { id: data.id, name: data.name, email: data.email } : null);
+      });
+  }, [authUser?.id]);
 
   return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 }
@@ -47,11 +34,11 @@ export function useUser() {
   return useContext(UserContext);
 }
 
+// Keep these exports so existing code doesn't break
 export const USER_CHANGE_EVENT = "sentinel_user_change";
-
 export function setCurrentUserId(id: string) {
   if (typeof window !== "undefined") {
-    localStorage.setItem(STORAGE_KEY, id);
+    localStorage.setItem("sentinel_user_id", id);
     window.dispatchEvent(new CustomEvent(USER_CHANGE_EVENT, { detail: id }));
   }
 }

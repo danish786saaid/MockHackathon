@@ -1,12 +1,28 @@
 create table if not exists users (
   id uuid primary key default gen_random_uuid(),
+  username text,
   name text,
   email text,
+  password text,
   created_at timestamptz default now()
 );
 alter table users enable row level security;
 drop policy if exists "Allow read users" on users;
 create policy "Allow read users" on users for select using (true);
+drop policy if exists "Allow insert users" on users;
+create policy "Allow insert users" on users for insert with check (true);
+drop policy if exists "Allow update users" on users;
+create policy "Allow update users" on users for update using (true);
+
+-- Migration: add columns if table already exists
+alter table users add column if not exists username text;
+alter table users add column if not exists password text;
+do $$ begin
+  alter table users add constraint users_email_key unique (email);
+exception when duplicate_object then null;
+end $$;
+update users set username = 'default_user', password = 'password123'
+where username is null;
 
 create table if not exists news_feed (
   id uuid primary key default gen_random_uuid(),

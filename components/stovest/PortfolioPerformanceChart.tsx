@@ -1,70 +1,48 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { supabase } from "@/lib/supabaseClient";
-import { useUser } from "@/contexts/UserContext";
+import {
+  PERFORMANCE_DATA_DAY,
+  PERFORMANCE_DATA_WEEK,
+  PERFORMANCE_DATA_1M,
+  PERFORMANCE_DATA_6M,
+  PERFORMANCE_DATA_1Y,
+} from "@/lib/stovest-data";
 
-type PerfPoint = { month: string; value: number };
+const RANGE_BUTTONS = ["D", "1W", "1M", "6M", "1Y"] as const;
 
-const RANGE_BUTTONS = ["D", "1W", "1M", "6M", "1Y"];
+const RANGE_DATA: Record<(typeof RANGE_BUTTONS)[number], { data: { month?: string; label?: string; value: number }[]; xKey: string }> = {
+  D: { data: PERFORMANCE_DATA_DAY, xKey: "label" },
+  "1W": { data: PERFORMANCE_DATA_WEEK, xKey: "month" },
+  "1M": { data: PERFORMANCE_DATA_1M, xKey: "month" },
+  "6M": { data: PERFORMANCE_DATA_6M, xKey: "month" },
+  "1Y": { data: PERFORMANCE_DATA_1Y, xKey: "month" },
+};
 
 export default function PortfolioPerformanceChart() {
-  const user = useUser();
-  const [activeRange, setActiveRange] = useState("6M");
-  const [data, setData] = useState<PerfPoint[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [activeRange, setActiveRange] = useState<(typeof RANGE_BUTTONS)[number]>("6M");
 
-  useEffect(() => {
-    if (!user?.id) return;
-    supabase
-      .from("performance_data")
-      .select("month, value")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: true })
-      .then(({ data: res, error }) => {
-        if (!error && res?.length) {
-          setData(res.map((r) => ({ month: r.month, value: Number(r.value) })));
-        } else {
-          setData([]);
-        }
-        setLoading(false);
-      });
-  }, [user?.id]);
-
-  if (!loading && data.length === 0) {
-    return (
-      <div className="rounded-2xl border border-white/10 bg-[#16181c] p-6">
-        <h3 className="mb-4 text-base font-semibold text-white">Portfolio Performance</h3>
-        <div className="flex h-64 items-center justify-center">
-          <p className="text-sm text-[#94a3b8]">No performance data. Run the Supabase schema.</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (loading) {
-    return (
-      <div className="rounded-2xl border border-white/10 bg-[#16181c] p-6">
-        <h3 className="mb-4 text-base font-semibold text-white">Portfolio Performance</h3>
-        <div className="flex h-64 items-center justify-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#3b82f6] border-t-transparent" />
-        </div>
-      </div>
-    );
-  }
+  const { data, xKey } = useMemo(() => RANGE_DATA[activeRange], [activeRange]);
+  const domain = useMemo(() => {
+    const values = data.map((d) => d.value);
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    const padding = (max - min) * 0.1 || 10000;
+    return [Math.floor(min - padding), Math.ceil(max + padding)];
+  }, [data]);
 
   return (
     <div className="rounded-2xl border border-white/10 bg-[#16181c] p-6">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-base font-semibold text-white">Portfolio Performance</h3>
-        <div className="flex gap-1 rounded-lg bg-white/5 p-1">
+        <div className="flex shrink-0 gap-0 rounded-lg border border-white/10 bg-white/5 p-0.5">
           {RANGE_BUTTONS.map((r) => (
             <button
               key={r}
               onClick={() => setActiveRange(r)}
-              className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
-                activeRange === r ? "bg-[#3b82f6] text-white" : "text-[#94a3b8] hover:text-white"
+              className={`min-w-[2.25rem] rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+                activeRange === r ? "bg-[#3b82f6] text-white" : "text-[#94a3b8] hover:bg-white/5 hover:text-white"
               }`}
             >
               {r}
@@ -82,8 +60,21 @@ export default function PortfolioPerformanceChart() {
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" vertical={false} />
-            <XAxis dataKey="month" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
-            <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(v) => (v >= 1000 ? `${v / 1000}k` : String(v))} domain={[0, 200000]} ticks={[0, 50000, 100000, 150000, 200000]} />
+            <XAxis
+              dataKey={xKey}
+              stroke="#94a3b8"
+              fontSize={11}
+              tickLine={false}
+              axisLine={false}
+            />
+            <YAxis
+              stroke="#94a3b8"
+              fontSize={11}
+              tickLine={false}
+              axisLine={false}
+              tickFormatter={(v) => (v >= 1000 ? `${v / 1000}k` : String(v))}
+              domain={domain}
+            />
             <Tooltip
               contentStyle={{
                 backgroundColor: "#16181c",
@@ -92,7 +83,7 @@ export default function PortfolioPerformanceChart() {
                 color: "#94a3b8",
               }}
               formatter={(value: number) => [`$${value?.toLocaleString()}`, ""]}
-              labelFormatter={(label) => `1st ${label} 2024`}
+              labelFormatter={(label) => (activeRange === "D" ? `${label} today` : `${label}`)}
             />
             <Area type="monotone" dataKey="value" stroke="#3b82f6" strokeWidth={2} fill="url(#performanceGrad)" />
           </AreaChart>
