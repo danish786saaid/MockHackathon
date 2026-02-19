@@ -14,63 +14,70 @@ export default function PortfolioMain() {
   const [seeAllOpen, setSeeAllOpen] = useState(false);
 
   return (
-    <main className="mx-auto max-w-[1440px] px-8 pb-12 pt-8">
-      {/* Page header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight text-white">Portfolio</h1>
-        <p className="mt-1 text-sm text-[#78716c]">Track your holdings, performance, and watchlist.</p>
+    <main
+      className="bento-grid"
+      style={{
+        marginLeft: 260,
+        marginRight: 320,
+        paddingTop: "calc(3.5rem + 24px)",
+        paddingLeft: 24,
+        paddingRight: 24,
+        paddingBottom: 24,
+        minHeight: "calc(100vh - 3.5rem)",
+      }}
+    >
+      {/* Row 1: Profile card (4 col) + Total Holding (4 col) + My Portfolio (4 col) */}
+      <div className="col-span-4 h-full min-h-0">
+        <button
+          type="button"
+          onClick={() => setProfileOpen(true)}
+          className="glass-card flex h-full min-h-[180px] w-full cursor-pointer flex-col items-center justify-center gap-4 p-6 text-left transition-shadow hover:shadow-glassHover"
+        >
+          <div className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/10 bg-white/10">
+            {!profileImgError ? (
+              <img
+                src="/portfolio/profile.png"
+                alt="Profile"
+                width={80}
+                height={80}
+                className="h-full w-full object-cover"
+                onError={() => setProfileImgError(true)}
+              />
+            ) : (
+              <span className="text-xl font-bold">NR</span>
+            )}
+          </div>
+          <div className="text-center">
+            <h3 className="text-lg font-semibold">Naya Rochel</h3>
+            <p className="mt-0.5 text-sm opacity-80">Portfolio overview</p>
+          </div>
+        </button>
       </div>
-
-      <div className="bento-grid">
-        {/* Row 1: Profile card (4 col) + Total Holding (4 col) + My Portfolio (4 col) */}
-        <div className="col-span-4">
-          <button
-            type="button"
-            onClick={() => setProfileOpen(true)}
-            className="glass-card flex h-full min-h-[180px] w-full cursor-pointer flex-col items-center justify-center gap-4 p-6 text-left transition-shadow hover:shadow-glassHover"
-          >
-            <div className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/10 bg-white/10">
-              {!profileImgError ? (
-                <img
-                  src="/portfolio/profile.png"
-                  alt="Profile"
-                  width={80}
-                  height={80}
-                  className="h-full w-full object-cover"
-                  onError={() => setProfileImgError(true)}
-                />
-              ) : (
-                <span className="text-xl font-bold">NR</span>
-              )}
-            </div>
-            <div className="text-center">
-              <h3 className="text-lg font-semibold">Naya Rochel</h3>
-              <p className="mt-0.5 text-sm text-[#78716c]">Portfolio overview</p>
-            </div>
-          </button>
-        </div>
-        <div className="col-span-4">
+      <div className="col-span-4 h-full min-h-0">
+        <div className="h-full min-h-[180px]">
           <TotalHoldingCard />
         </div>
-        <div className="col-span-4">
+      </div>
+      <div className="col-span-4 h-full min-h-0">
+        <div className="h-full min-h-[180px]">
           <MyPortfolioRow onSeeAllClick={() => setSeeAllOpen(true)} />
-        </div>
-
-        {/* Row 2: Performance chart full width */}
-        <div className="col-span-12">
-          <PortfolioPerformanceChart />
-        </div>
-
-        {/* Row 3: Overview table (8 col) + Watchlist (4 col) */}
-        <div id="portfolio-overview" className="col-span-8 scroll-mt-6">
-          <PortfolioOverviewTable />
-        </div>
-        <div className="col-span-4">
-          <WatchlistSection />
         </div>
       </div>
 
-      {/* All holdings modal */}
+      {/* Row 2: Performance chart full width */}
+      <div className="col-span-12">
+        <PortfolioPerformanceChart />
+      </div>
+
+      {/* Row 3: Overview table (8 col) + Watchlist (4 col) */}
+      <div id="portfolio-overview" className="col-span-8 h-full scroll-mt-6">
+        <PortfolioOverviewTable />
+      </div>
+      <div className="col-span-4 h-full">
+        <WatchlistSection />
+      </div>
+
+      {/* All holdings modal (See all) */}
       {seeAllOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
@@ -89,7 +96,7 @@ export default function PortfolioMain() {
               <button
                 type="button"
                 onClick={() => setSeeAllOpen(false)}
-                className="rounded-lg p-2 text-[#78716c] hover:bg-white/10 hover:text-white"
+                className="rounded-lg p-2 opacity-80 hover:bg-white/10 hover:opacity-100"
                 aria-label="Close"
               >
                 <span className="text-xl leading-none">&times;</span>
@@ -99,11 +106,11 @@ export default function PortfolioMain() {
               {PORTFOLIO_STOCKS.map((s) => (
                 <div
                   key={s.ticker}
-                  className="glass-subtle flex items-center justify-between px-4 py-3"
+                  className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-3"
                 >
                   <div>
                     <p className="font-medium">{s.ticker}</p>
-                    <p className="text-xs text-[#78716c]">Units {s.units}</p>
+                    <p className="text-xs opacity-80">Units {s.units}</p>
                   </div>
                   <div className="text-right">
                     <p className="font-bold">${s.value.toLocaleString("en-US", { minimumFractionDigits: 1 })}</p>
@@ -137,7 +144,7 @@ export default function PortfolioMain() {
               <button
                 type="button"
                 onClick={() => setProfileOpen(false)}
-                className="rounded-lg p-2 text-[#78716c] hover:bg-white/10 hover:text-white"
+                className="rounded-lg p-2 opacity-80 hover:bg-white/10 hover:opacity-100"
                 aria-label="Close"
               >
                 <span className="text-xl leading-none">&times;</span>
@@ -160,8 +167,8 @@ export default function PortfolioMain() {
               </div>
               <div className="text-center">
                 <h3 className="text-xl font-semibold">Naya Rochel</h3>
-                <p className="mt-1 text-sm text-[#78716c]">rachel@gmail.com</p>
-                <p className="mt-3 text-sm text-[#78716c]">
+                <p className="mt-1 text-sm opacity-80">rachel@gmail.com</p>
+                <p className="mt-3 text-sm opacity-80">
                   Portfolio overview. View and manage your holdings, performance, and watchlist from this page.
                 </p>
               </div>
